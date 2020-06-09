@@ -1029,7 +1029,7 @@ Node *LinkedList::LoopDetection()
     return nullptr
 }
 ````
-# Chapter3: Stack and Queue
+# Chapter 3: Stack and Queue
 ## Implement Stack in linked list
 ````c++
 struct Stack_Node
@@ -1645,11 +1645,46 @@ Animal dequeDog()
     else
         printf("No dog in this shilter")
 }
-
-
-
-
 ````
+# Chapter 4: Tree and Graph
+## In-order traversal
+Transverse the tree node from small to big
+````c++
+void Inordertraversal(TreeNode node)
+{
+    if(node != null)
+    {
+        Inordertraversal(node.left)
+        printf(node.data)
+        Inordertraversal(node.right)
+    }
+}
+````
+## Pre-order traversal
+````c++
+void PreorderTraversal(TreeNode node)
+{
+    if(node != null)
+    {
+        printf(node.data)
+        PreorderTraversal(node->left)
+        PreorderTraversal(node->right)
+    }
+}
+````
+## Post-order traversal
+````c++
+void PostorderTraversal(TreeNode node)
+{
+    if(node != null)
+    {
+        PostorderTraversal(node->left)
+        PostorderTraversal(node->right)
+        printf(node.data)
+    }
+}
+````
+        
 
 
 
