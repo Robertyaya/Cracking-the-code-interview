@@ -1441,6 +1441,81 @@ void Pop()
 
 }
 ````
+### 3-4 Stacks and Queues
+Use two stack to implement the operation of queue
+````c++
+class MyQueue
+{
+    // Put data into queue O(1)
+    Push(data)
+
+    // Pop data from queue O(N)
+    Pop()
+
+    // Get the top front data from queue O(N)
+    int front()
+
+private:
+    stack<int> stack_1
+    stack<int> stack_2
+}
+
+Push(data)
+{
+    stack_1.push(data)
+}
+
+Pop()
+{
+    if(stack1.empty())
+        return
+    
+    // Use the stack2 to reverse the original data
+    while(!stack1.empty())
+    {
+        temp_data <- stack1.top()
+        stack2.push(temp_data)
+        stack1.pop()
+    }
+    
+    // pop up the front data
+    stack2.pop()
+
+    // Put the reverse data to original stack
+    while(!stack2.empty())
+    {
+        temp_data <- stack2.top()
+        stack1.push(temp_data)
+        stack2.pop()
+    }
+}
+
+int front()
+{
+    if(stack1.empty())
+        return -1
+    
+     // Use the stack2 to reverse the original data
+    while(!stack1.empty())
+    {
+        temp_data <- stack1.top()
+        stack2.push(temp_data)
+        stack1.pop()
+    }
+
+    // Record the front data
+    int front_data = stack2.top()
+
+    // Put the reverse data to the original stack
+    while(!stack2.empty())
+    {
+        temp_data <- stack2.top()
+        stack1.push(temp_data)
+        stack2.pop()
+    }
+}
+````
+
 
 
 
