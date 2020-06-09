@@ -1515,6 +1515,141 @@ int front()
     }
 }
 ````
+### 3-5 Sorted Stack
+````c++
+class SortedStack
+{
+    // Push the data into sorted stack
+    Push(data) {sort(data)}
+    
+    // Pop up the data from sorted stack
+    Pop() {sortedstack.pop()}
+
+    // Get the value from sorted stack
+    Peek() {return sortedstack.top()}
+
+    // Check the sorted stack whether is empty
+    isEmpty() {return sortedstack.empty()}
+
+private:
+    sort(int data)
+    std::stack<int> sortedstack
+}
+
+// Time: O(N), Space: O(N)
+sort(int data)
+{
+    stack<int> temp_stack
+    while(!temp_stack.empty() && temp_stack.top() < data)
+    {
+        temp_stack.push(sortedstack.top())
+        sortedstack.pop()
+    }
+    
+    sortedstack.push(data)
+
+    while(!temp_stack.empty())
+    {
+        sortedstack.push(temp_stack.top())
+        temp_stack.pop()
+    }
+}
+````
+### 3-6 Animal Shilter
+````c++
+enum AnimalType
+{
+    Cat, Dog
+};
+
+struct Animal
+{
+    std::string AnimalName
+    AnimalType type
+}
+
+class AnimalShilter
+{
+    // Add animal to shilter
+    enqueue(Animal animal)
+
+    // Pop up the arbitrary animal from shilter
+    Animal dequeueAny()
+
+    // Pop up the dog from shilter
+    Animal dequeDog()
+
+    // Pop up the cat from shilter
+    Animal dequeCat()
+
+private:
+    std::queue<Animal> cat_queue
+    std::queue<Animal> dog_queue
+}
+
+enqueue(Animal animal)
+{
+    // Insert the different queue base on the animal type
+    if(animal.type == AnimalType::Cat)
+    {
+        cat_queue.push(animal)
+
+    }
+    else if (animal.type == AnimalType::Dog)
+    {
+        dog_queue.push(animal)
+    }
+    else
+        printf("The type is neither cat nor dog")
+}
+
+Animal dequeueAny()
+{
+    // The default pop up value is from dog
+    if(!dog_queue.empty())
+    {
+        temp_data <- dog_queue.front()
+        dog_queue.pop()
+        return temp_data
+    }
+    else if (!cat_queue.empty())
+    {
+        temp_data <- cat_queue.front()
+        cat_queue.pop()
+        return temp_data
+    }
+    else
+        printf("This shilter is empty")
+}
+
+Animal dequeCat()
+{
+    if(!cat_queue.empty())
+    {
+        temp_data<- cat_queue.front()
+        cat_queue.pop()
+        return temp_data
+    }
+    else
+        printf("No cat in this shilter")
+}
+
+Animal dequeDog()
+{
+    if(!dog_queue.empty())
+    {
+        temp_data<- dog_queue.front()
+        cdo_queue.pop()
+        return temp_data
+    }
+    else
+        printf("No dog in this shilter")
+}
+
+
+
+
+````
 
 
 
