@@ -1647,43 +1647,314 @@ Animal dequeDog()
 }
 ````
 # Chapter 4: Tree and Graph
-## In-order traversal
-Transverse the tree node from small to big
+## Implement Binary Search Tree
 ````c++
-void Inordertraversal(TreeNode node)
+struct TreeNode
 {
-    if(node != null)
+    TreeNode* leftchild
+    TreeNode＊ rightchild
+    int data
+}
+
+class BST
+{
+    // Insert data to BST
+    void Insert(int data) // O(logN)
+
+    // To check whether input data is in the BST
+    bool Contain(int data) // O(logN)
+
+    // Remove value from BST
+    void Remove(int data) // O(logN)
+
+    // Pre-order tranverse
+    void Preorder(TreeNode* currentNode) // O(N)
+
+    // In-order transverse
+    void Inorder(TreeNode* currentNode) // O(N)
+
+    // Post-order transverse
+    void Postorder(TreeNode* currentNode) // O(N)
+
+    // Level-order transverse
+    void Levelorder() // O(N)
+    
+private:
+    // Point to the tree root
+    TreeNode* root;
+
+    // Insert helper (run recursive)
+    Insert(TreeNode*& current_node, int data)
+    
+    // Contain helper (run recursive)
+    bool Contain(TreeNode*& current_node, int data)
+    
+    // Remove helper (run recursive)
+    Remove(TreeNode*& current_node, int data)
+    // To find the min tree node in the current_node's right sub-tree
+    TreeNode*& FindMinNode(TreeNode* current_node)
+}
+
+// Insert
+Insert(int data)
+{
+    Insert(root, data)
+}
+Insert(TreeNode* current_node, int data)
+{
+    if(current_node == nullptr) // Represent arrive the leaf
+        current_node = new TreeNode(data)
+    else if (data >= current_node->data) // Represent this data need to insert in right subtree
+        Insert(current_node->right_child, data)
+    else if(data < current_node->data) // Represent this data need to insert in left subtree
+        Insert(current_node->left_child, data)
+}
+
+// Contain
+bool Contain(int data)
+{
+    Contain(root, data)
+}
+bool Contain(TreeNode* current_node, int data)
+{
+    // Can't find the data in BST
+    if(current_node == nullptr)
+        return false
+
+    if(data == current_node->data)
+        return true
+    else if(data >= current_node->data)
+        return Contain(current_node->right_child, data)
+    else
+        return Contain(current_node->left_child, data)
+
+}
+
+// Remove
+Remove(int data)
+{
+    Remove(root, data)
+}
+Remove(TreeNode*& current_node, int data)
+{
+    if(current_node == nullptr)
+        printf("This data not in the BST")
+    else if(data == current_node->data)
     {
-        Inordertraversal(node.left)
-        printf(node.data)
-        Inordertraversal(node.right)
+        // Point to the node which need to be removed
+        TreeNode*& trash = nullptr;
+
+        // Case 1: No child
+        if(current_node->left_child == nullptr && current_node->right_child == nullptr)
+        {
+            trash = current_node
+            current_node = nullptr
+        }
+        else if(current_node->left_child != nullptr && current_node->right_child == nullptr) // Case 2: Have left_child
+        {
+            trash = current_node
+            current_node = current_node->left_child // Move the current_node to the left_child
+        }
+        else if(current_node->left_child == nullptr && current_node->right_child != nullptr) // Case 3: Have right_child
+        {
+            trash = current_node
+            current_node = current_node->right_child // Move the current_node to the right_child
+        }
+        else // Case 4: Have both child, we need to find the min data in "right sub-tree"
+        {
+            // Find the min node in right subtree
+            TreeNOde*& MinNode = FindMinNode(current_node->right_child)
+            // Update min node in right subtree to current node
+            current_node->data = MinNode->data'
+            // Remove min node in right subtree
+            Remove(MinNode, MinNode->data)
+        }
+
+        // Release memory
+        if(trash != nullptr)
+            delete trash
+    }
+    else if(data >= current_node->data)
+        Remove(current_node->right_child, data)
+    else // data < current_node->data
+        Remove(current_node->left_child, data)
+}
+
+TreeNode*& FindMinNode(TreeNode* current_node)
+{
+    if(current_node->left_child == nullptr)
+        return current_node
+    return FindMinNode(current_node->left_child)
+}
+
+
+
+Preorder(TreeNode* currentNode)
+{
+    if(currentNode != nullptr)
+    {
+        printf(currentNode->data)
+        Preorder(currentNode->leftchild)
+        Preorder(currentNode->rightchild)
+    }
+}
+
+Inorder(TreeNode* currentNode)
+{
+    if(currentNode != nullptr)
+    {
+        Inorder(currentNode->leftchild)
+        printf(currentNode->data)
+        Inorder(currentNode->rightchild)
+    }
+}
+
+Postorder(TreeNode* currentNode)
+{
+    if(currentNode != nullptr)
+    {
+        Postorder(currentNode->leftchild)
+        Postorder(currentNode->rightchild)
+        printf(currentNode->data)
+    }
+}
+
+Levelorder()
+{
+    // Use queue to support tranverse tree by level-order
+    std::queue<TreeNode*> temp_queue
+    temp_queue.push(root)
+    while(!temp_queue.empty())
+    {
+        // When we visit the treenode and pop up from queue, we push its left and right children into queue
+        TreeNode* temp_node = temp_queue.front()
+        printf(temp_node->data)
+        temp_queue.pop() // Have alreay visit this node, pop up fron queue
+
+        if(temp_node->leftchild != nullptr)
+            temp_queue.push(temp_node->leftchild)
+        if(temp_node->rightchild != nullptr)
+            temp_queue.push(temp_node->rightchild)
     }
 }
 ````
-## Pre-order traversal
+## Implement Max heap (Min heap)
 ````c++
-void PreorderTraversal(TreeNode node)
+class MaxHeap
 {
-    if(node != null)
+    // Insert value to Maxheap and keep the max value on the top
+    Insert(data) // O(logN)
+
+    // Return the max value in the heap
+    int ExtractMax() // O(1)
+
+    // Remove the max value in the heap
+    RemoveMax() // O(logN)
+private:
+
+    // Get parent of input index
+    parent(index)
+    // Get right child of input index
+    right(index)
+    // Get left child of input index
+    left(index)
+
+    //Keep the heap properties from top to down (when delete the top value from heap)
+    Heapify_Down(index) 
+    // Keep the heap properties from down to top (when insert the new value to heap)
+    Heapifty_Up(index)
+    
+    // Use vector to build the heap
+    std::vector<int> heap
+
+}
+
+Insert(data)
+{
+    heap.push_back(data)
+    Heapify_Up(heap.size()-1)
+}
+
+int ExtractMax()
+{
+    if(heap.size() == 0)
+        printf("The heap is empty")
+    return heap.front()
+}
+
+RemoveMax()
+{
+    if(heap.size() == 0)
+        printf("The heap is empty")
+    
+    // Move the last value to the root
+    heap[0] = heap[heap.size()-1]
+    // Remove the last value
+    heap.pop_back()
+
+    Heapify_Down(0)
+}
+
+
+
+Heapify_Up(index)
+{
+    // Ensure index and its parent is valid
+    // check if parent's value is smaller then index's value, switch them, because we build the max heap now, the max value need to on the top
+    if(index >= 0 && parent(index) >= 0 && heap[parent(index)] < heap(index))
     {
-        printf(node.data)
-        PreorderTraversal(node->left)
-        PreorderTraversal(node->right)
+        // Switch index's value and parent's value
+        temp_value <- heap[parent(index)]
+        heap[parent(index)] <- heap[index]
+        heap[index] <- temp
+
+        // Recursive to do this until the max value on the top
+        Heapify_Up(parent(index))
     }
 }
-````
-## Post-order traversal
-````c++
-void PostorderTraversal(TreeNode node)
+
+Heapify_Down(index)
 {
-    if(node != null)
+    // If right child valid, left child must valid. however, left child valid, we can't ensure right child is valid, therefore we set defalut node we change is left child
+    child <- left(index)
+    child1 <- right(index)
+
+    // Find which node is bigger, if right child is bigger, we change "child" to right child
+    if(child >= 0 && child1 >= 0 && heap[child] < heap[child1])
+        child <- child1
+    if(child >= 0 && heap[index] < heap[child])
     {
-        PostorderTraversal(node->left)
-        PostorderTraversal(node->right)
-        printf(node.data)
+        temp_value <- heap[child]
+        heap[child] <- heap[index]
+        heap[index] <- temp_value
+        Heapify_Down(child)
     }
 }
+
+parent(index)
+{
+    if(index == 0)
+        return -1
+    return (index-1)/2
+}
+left(index)
+{
+    if(index > heap.size()-1)
+        return -1
+    return 2*index+1
+}
+right(index)
+{
+    if(index > heap.size()-1)
+        return -1
+    return 2*index+2
+}
+
+
+
 ````
+
+
         
 
 
