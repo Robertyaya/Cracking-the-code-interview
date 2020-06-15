@@ -1949,10 +1949,307 @@ right(index)
         return -1
     return 2*index+2
 }
-
-
-
 ````
+## Implement Trie
+````c++
+#define CHAR_SIZE 128
+// Use this struct to build the trie's node
+struct TrieNode
+{
+    // TrieNode constructor
+    TrieNode()
+    {
+        isEndOfNode = false;
+        for i (from 0 to CHAR_SIZE)
+            children[i] = nullptr
+    }
+    
+    // Record the children trie node
+    TrieNode *children[CHAR_SIZE]
+    
+    // Reocrd the whether this trie node is the end of string
+    bool isEndOfNode 
+}
+
+class Trie
+{
+public:
+    // Insert string to Trie
+    Insert(string str)
+
+    // Delete string from trie
+    Delete(string str)
+
+    // Search string whether in the trie
+    bool Search(string str)
+
+private:
+    // Delete: Recursive helper.
+    bool Delete(TrieNode *&current_node, string str, int depth)
+
+    // To check the input node whether have the children
+    bool HaveChildren(TrieNode *&current_node)
+
+private:
+    TrieNode* root
+}
+
+Insert(str)
+{
+    // Build the trie
+    if(root == nullptr)
+        root = new TrieNode
+
+    // Point to the root
+    TrieNode* current_node = root
+    for i (from 0 to str.size()-1)
+    {
+        index <- int(str[i])
+        if(current_node->children[index] == nullptr)
+            current_node->children[index] = new TrieNode()
+        
+        // Move the the next node
+        current_node = current_node->children[index]   
+    }
+
+    // Mark the end of node
+    current_node->isEndOfNode = true
+}
+
+bool Search(str)
+{
+    // The trie is empty
+    if(root == nullptr)
+        return false
+
+    // Point to the trie's root
+    TrieNode* current_node = root
+    for i (from 0 to str.size()-1)
+    {
+        index <- int(str[i])
+        // Can't find this char in the trie, represent this string is not in the trie retur false
+        if(current_node->children[index] == nullptr)
+            return false
+        
+        // Update current node
+        current_node = current_node->children[index]
+    }
+    // Need to ensure the last char is endofnode, represent this string is in the trie
+    return current_node -> isEndOfNode
+}
+
+Delete(str)
+{
+    Delete(root, str, 0)
+}
+bool Delete(TrieNode *&current_node, string str, int depth)
+{
+    // The char not in the trie
+    if(current_node == nullptr)
+        return false
+
+    // Arrive the last char
+    if(depth == str.size)
+    {
+        // Check whether arrive the end of node
+        if(current_node->isEndOfNode)
+        {
+            delete current_node
+            current_node = nullptr
+            return true
+        }
+        else
+            return false
+    }  
+
+    // Recursive until arrive the last node
+    index <- int(str[depth])
+    if(Delete(current_node->children[index], str, depth+1))
+    {
+        // Check whether current_node is the prefix of another node
+        // "hero" and "heroplane", remove heroplane, at "o" we mark isEndOfNode, therefore, we will not remove it
+        if(!HaveChildren(current_node) && !current_node->isEndOfNode)
+        {
+            delete current_node
+            current_node = nullptr
+        }
+        return true
+    }
+    else
+        return false
+}
+
+
+bool HaveChildren(TrieNode *&current_node)
+{
+    for i (from 0 to CHAR_SIZE-1)
+    {
+        // Have the children in the current_node
+        if(current_node->children[i] != nullptr)
+            return true
+    }
+    return false
+}
+````
+##Implement Graph
+[Graph theory](http://alrightchiu.github.io/SecondRound/graph-introjian-jie.html)
+````c++
+class Graph
+{   
+    // Initialize the number of vertex in the graph
+    Graph(num):num_vertex(num)
+    {
+        AdjList.resize(num)
+    }
+
+    // Breadth-First Search
+    BFS(start_vertex)
+
+    // Depth-First Search
+    DFS(start_vertex)
+
+    // Add edge to graph
+    AddEdgeList(start_vertex, end_vertex)
+
+private:
+
+    // Use adjacent list to build the graph
+    vector<list<int>> AdjList
+
+    // Record the number of vertex in the graph
+    int num_vertex
+
+    // Three kind of color
+    // 1. White: not be found
+    // 2. Gray: Be found, put in the queue
+    // 3. Black: Be found, remove from queue
+    int *color;
+     // record the the vertex is fonund by which vertex, in order to back track the path
+    int *predecessor;
+
+    // (BFS) record the distance between the start and the any vertex
+    int *distance;
+
+    // (DFS) record the vertex which time be found and finish
+    int *discover
+    int *finish
+
+private:
+    // DFS recursive helper
+    DFSVisit(start_index, time)
+}
+
+AddEdgeList(start_vertex, end_vertex)
+{
+    AdjList[start_vertex].push_back(end_vertex)
+}
+
+DFS(start_vertex)
+{
+    // Allocate memory
+    color = new int[num_vertex]
+    predecessor = new int[num_vertex]
+    discover = new int[num_vertex]
+    finish = new int [num_vertex]
+    // Initialize
+    for i (from 0 to num_vertex)
+    {
+        color[i] = 0
+        predecessor[i] = -1
+        discover[i] = 0
+        finish[i] = 0
+    }
+
+    int i = start
+    int time = 0
+    // Tranverse every vertex to ensure every vertex is visited
+    for j (from 0 to num_vertex)
+    {   
+        // Not been visited yet
+        if(color[i] == 0)
+        {
+            DFSVisit(i, time)
+        }
+        i = j
+    }
+}
+DFSVisit(vertex, time)
+{
+    color[vertex] = 1
+    discover[vertex] = ++time
+    
+    // Tranverse every adjcent list
+    for(list<int>::iterator iter = AdjList[vertex].begin; iter!=AdjList[vertex].end; iter++)
+    {
+        // Represent this vertex is not visited yet
+        if(AdjList[*iter] == 0)
+        {
+            predecessor[*iter] = AdjList[vertex]
+            DFSVisit(*iter, time)
+        }
+    }
+    color[vertex] = 2
+    finish[vertex] = ++time
+}
+
+BFS(start_vertex)
+{
+    // Initialize
+    color = new int[num_vertex]
+    distance = new int[num_vertex]
+    predecessor = new int[num_vertex]
+    for i (from 0 to num_vertex)
+    {
+        color[i] = 0
+        // The longest path in graph is num_vertex - 1, we set the big value represent can't arrive initial
+        distance[i] = num_vertex + 1
+
+        predecessor[i] = -1
+    }
+
+    // Set i as the start vertex's index
+    int i = start_vertex
+    queue<int> q
+
+    // Tranverse every vertex, to handle there are several connected component in the graph
+    for j (from 0 to vertex_num)
+    {
+        // Represent this vertex not visit yet
+        if(color[i] == 0)
+        {
+            color[i] = 1
+            distance[i] = 0
+            // Every connected component's start point not have the predecessor
+            predecessor[i] = -1
+            
+            // Push the start vertex into queue
+            q.push(i)
+            while(!q.empty())
+            {
+                u = q.front
+                // Tranverse the adjacent list of u
+                for list<int>::iterator iter (from AdjList[u].begin() to AdjList[u].end())
+                {
+                    // Have not been visited yet
+                    if(color[*iter] == 0)
+                    {
+                        q.push(*iter)
+                        color[*iter] = 1
+                        distance[*iter] = distance[u] + 1
+                        predecessor[*iter] = u
+                    }
+                }
+                q.pop() // Pop 'u' from queue, we already visit
+                color[u] = 2
+            }
+        }
+        i = j
+    }
+
+}
+````
+
+
 
 
         
